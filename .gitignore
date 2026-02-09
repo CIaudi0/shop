@@ -1,0 +1,20 @@
+# Dipendenze
+node_modules/
+/backend/vendor/bundle
+/backend/tmp
+/backend/log
+
+# Environment variables
+.env
+.env.production
+/backend/config/master.key
+
+# Build output
+/frontend/dist/
+/backend/public/assets
+
+# IDE e OS
+.idea/
+.vscode/
+.DS_Store
+coverage/

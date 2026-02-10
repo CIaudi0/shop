@@ -4,7 +4,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
-import { CartService } from './services/cart'; 
 
 @Component({
   selector: 'app-root',
@@ -21,11 +20,10 @@ import { CartService } from './services/cart';
   styleUrl: './app.scss'
 })
 export class AppComponent {
-  title = 'My Store';
-
   private router = inject(Router);
-  public cartService = inject(CartService);
   
+  title = 'Shop';
+
   goToCheckout() {
     this.router.navigate(['/checkout']);
   }

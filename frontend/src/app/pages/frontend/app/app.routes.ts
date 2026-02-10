@@ -1,21 +1,12 @@
 import { Routes } from '@angular/router';
 import { CheckoutComponent } from './pages/checkout/checkout';
-import { LoginComponent } from './pages/login/login';
 import { checkoutGuard } from './guards/checkout';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-
-  { 
-    path: 'login', 
-    component: LoginComponent 
-  },
-
+  // ... altre rotte
   { 
     path: 'checkout', 
     component: CheckoutComponent, 
     canActivate: [checkoutGuard] 
-  },
-  
-  { path: '**', redirectTo: 'login' }
+  }
 ];

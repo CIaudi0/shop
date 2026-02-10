@@ -4,10 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { take } from 'rxjs';
 import { Order } from '../../models/product';
-
-import { OrderService } from '../../services/order';
-import { CartService } from '../../services/cart';
 
 @Component({
   selector: 'app-checkout',
@@ -19,22 +17,23 @@ import { CartService } from '../../services/cart';
     MatButtonModule,
     MatFormFieldModule
   ],
-  templateUrl: './checkout.html', 
-  styleUrl: './checkout.scss'
+  templateUrl: './checkout.component.html',
+  styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent {
   private fb = inject(FormBuilder);
   
-  // --- INIEZIONE SERVIZI REALI ---
-  private orderService = inject(OrderService);
-  public cartService = inject(CartService); 
+  // MOCK Services: Sostituisci con inject(OrderService) e inject(CartService)
+  private orderService = { create: (o: any) => ({ subscribe: (cb: any) => cb.next() }) };
+  private cartService = { items$: { pipe: (op: any) => ({ subscribe: (fn: any) => fn([]) }) }, clear: () => {} };
 
   loading = false;
   orderSuccess = false;
   orderError = false;
   showSummary = false;
 
-  items = this.cartService.items;
+  // Observable simulato del carrello
+  items$ = this.cartService.items$;
 
   form: FormGroup = this.fb.group({
     customer: this.fb.group({
@@ -48,6 +47,8 @@ export class CheckoutComponent {
       zip: ['', Validators.required]
     })
   });
+
+  // --- METODI DI CIRO ---
 
   getControl(path: string) {
     return this.form.get(path);
@@ -79,36 +80,29 @@ export class CheckoutComponent {
     
     const value = this.form.getRawValue();
 
-    // 1. Recupero gli items in modo sincrono dal Signal (non serve subscribe)
-    const currentItems = this.cartService.items();
+    this.items$.pipe(take(1)).subscribe((items: any[]) => {
+      const order: Order = {
+        customer: value.customer!,
+        address: value.address!,
+        items,
+        total: items.reduce(
+          (sum, it) => sum + it.price * it.quantity, 0),
+        createdAt: new Date().toISOString()
+      };
 
-    if (currentItems.length === 0) {
-        this.loading = false;
-        return;
-    }
-
-    // 2. Costruisco l'oggetto Order
-    const order: Order = {
-      customer: value.customer!,
-      address: value.address!,
-      items: currentItems.map(i => ({ id: i.id, quantity: i.quantity })),
-      total: 0, 
-      createdAt: new Date().toISOString()
-    };
-
-    // 3. Chiamata al servizio reale
-    this.orderService.create(order).subscribe({
-      next: () => {
-        this.loading = false;
-        this.orderSuccess = true;
-        this.cartService.clearCart(); // svuotare il carrello
-        this.form.reset();
-      },
-      error: (err) => {
-        console.error('Errore creazione ordine:', err);
-        this.loading = false;
-        this.orderError = true;
-      }
+      // Chiamata al servizio (simulato per ora)
+      this.orderService.create(order).subscribe({
+        next: () => {
+          this.loading = false;
+          this.orderSuccess = true;
+          this.cartService.clear();
+          this.form.reset();
+        },
+        error: () => {
+          this.loading = false;
+          this.orderError = true;
+        }
+      });
     });
   }
 }

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { CheckoutComponent } from './pages/checkout/checkout';
 import { LoginComponent } from './pages/login/login';
 import { checkoutGuard } from './guards/checkout';
+import { HomeComponent } from './pages/home/home'; 
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -9,6 +10,11 @@ export const routes: Routes = [
   { 
     path: 'login', 
     component: LoginComponent 
+  },
+  
+  { 
+    path: 'home', 
+    component: HomeComponent
   },
 
   { 

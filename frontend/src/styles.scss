@@ -4,7 +4,13 @@
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
+/* Importa un tema predefinito di Angular Material */
+
 @use '@angular/material' as mat;
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+/* Reset di base per far occupare tutto lo schermo */
+html, body { height: 100%; margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html {
   height: 100%;

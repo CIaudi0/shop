@@ -30,8 +30,9 @@ module Authentication
     end
 
     def request_authentication
-      session[:return_to_after_authenticating] = request.url
-      redirect_to new_session_path
+      # session[:return_to_after_authenticating] = request.url
+      # redirect_to new_session_path
+      render json: { error: "Non autorizzato. Effettua il login." }, status: :unauthorized
     end
 
     def after_authentication_url

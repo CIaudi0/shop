@@ -4,7 +4,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
-import { CartService } from './services/cart'; 
+import { CartService } from './services/cart';
+import { AuthService } from './services/auth';
 
 @Component({
   selector: 'app-root',
@@ -25,12 +26,14 @@ export class AppComponent {
 
   private router = inject(Router);
   public cartService = inject(CartService);
+  public authService = inject(AuthService);
+user: any;
   
   goToCheckout() {
     this.router.navigate(['/checkout']);
   }
   
   goToHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 }

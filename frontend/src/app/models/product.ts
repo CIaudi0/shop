@@ -8,6 +8,7 @@ export interface Product {
   thumbnail?: string;
   tags?: string[];
   createdAt: string;
+  role: string;
 }
 
 export interface Order {

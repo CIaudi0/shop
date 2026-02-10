@@ -1,13 +1,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-// import { AuthService } from '../services/auth.service'; // Decommenta quando hai il service
+import { AuthService } from '../services/auth';
 
 export const checkoutGuard: CanActivateFn = () => {
-  // const auth = inject(AuthService); // Decommenta quando hai il service
+  const auth = inject(AuthService); 
   const router = inject(Router);
 
-  // MOCK TEMPORANEO: Cambia 'true' con 'auth.isLoggedIn' quando pronto
-  const isLoggedIn = true; 
+  const isLoggedIn = auth.isLoggedIn; 
 
   return isLoggedIn
     ? true

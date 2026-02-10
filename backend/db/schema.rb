@@ -10,9 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_08_135415) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_10_143002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "order_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "order_id", null: false
+    t.decimal "price"
+    t.bigint "product_id", null: false
+    t.integer "quantity"
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.json "customer_data"
+    t.string "status"
+    t.decimal "total"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
 
   create_table "products", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -42,5 +63,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_08_135415) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "users"
   add_foreign_key "sessions", "users"
 end

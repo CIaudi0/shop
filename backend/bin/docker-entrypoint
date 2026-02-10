@@ -1,8 +1,17 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+# Rimuove un eventuale server.pid rimasto bloccato (server crashato in precedenza)
+if [ -f tmp/pids/server.pid ]; then
+  rm tmp/pids/server.pid
+fi
+
+# Se il comando passato è il server rails...
+if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  echo "--- Preparing database ---"
+  # Crea il DB e lancia le migrazioni se non esistono (idempotente)
   ./bin/rails db:prepare
 fi
 
+# Esegue il comando principale (es. rails server)
 exec "${@}"

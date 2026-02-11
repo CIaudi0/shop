@@ -1,52 +1,41 @@
-class ProductsController < ApplicationController
-  allow_unauthenticated_access only: %i[ index show ]
-  before_action :set_product, only: %i[ show update destroy ]
-
-  # GET /products
-  def index
-    @products = Product.all
-
-    render json: @products
-  end
-
-  # GET /products/1
-  def show
-    render json: @product
-  end
-
-  # POST /products
-  def create
-    @product = Product.new(product_params)
-
-    if @product.save
-      render json: @product, status: :created, location: @product
-    else
-      render json: @product.errors, status: :unprocessable_content
-    end
-  end
-
-  # PATCH/PUT /products/1
-  def update
-    if @product.update(product_params)
-      render json: @product
-    else
-      render json: @product.errors, status: :unprocessable_content
-    end
-  end
-
-  # DELETE /products/1
-  def destroy
-    @product.destroy!
-  end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params.expect(:id))
+module Admin
+  class ProductsController < ::AdminController
+    # GET /admin/products
+    def index
+      render json: Product.all.order(created_at: :desc)
     end
 
-    # Only allow a list of trusted parameters through.
+    # POST /admin/products
+    def create
+      product = Product.new(product_params)
+      if product.save
+        render json: product, status: :created
+      else
+        render json: { error: product.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    # PATCH/PUT /admin/products/:id
+    def update
+      product = Product.find(params[:id])
+      if product.update(product_params)
+        render json: product
+      else
+        render json: { error: product.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    # DELETE /admin/products/:id
+    def destroy
+      product = Product.find(params[:id])
+      product.destroy
+      head :no_content # 204 No Content (Successo, niente da restituire)
+    end
+
+    private
+
     def product_params
-      params.expect(product: [ :title, :description, :price, :original_price, :sale, :thumbnail ])
+      params.require(:product).permit(:title, :description, :price, :originalPrice, :sale, :thumbnail)
     end
+  end
 end

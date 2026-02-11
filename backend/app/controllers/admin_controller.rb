@@ -2,8 +2,9 @@ class AdminController < ApplicationController
   before_action :ensure_admin
 
   private
+
   def ensure_admin
-    unless Current.user&.admin?
+    unless Current.user&.role == 'admin'
       render json: { error: "Accesso negato. Richiesto ruolo Admin." }, status: :forbidden
     end
   end

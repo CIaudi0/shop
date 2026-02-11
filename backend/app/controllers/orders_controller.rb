@@ -1,12 +1,3 @@
-module Admin
-  class OrdersController < ::AdminController
-    # GET /admin/orders
-    def index
-      @orders = Order.includes(:user, :order_items).all
-      render json: @orders.as_json(include: { user: { only: [:id, :email_address] }, order_items: { only: [:id, :product_id, :quantity, :price] } })
-    end
-  end
-end
 class OrdersController < ApplicationController
   # utente loggato 
   # allow_unauthenticated_access only: [] 

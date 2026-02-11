@@ -7,17 +7,13 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(params.permit(:email_address, :password))
-      start_new_session_for user
-      
-      render json: { 
-        message: "Login successful", 
-        user: { email: user.email_address, id: user.id, role: user.role } 
-      }, status: :created
-    else
-      render json: { error: "Credenziali non valide" }, status: :unauthorized
-    end
+  if user = User.authenticate_by(params.permit(:email_address, :password))
+    start_new_session_for user
+    render json: { message: "Login effettuato", user: user.slice(:id, :email_address, :role) }
+  else
+    render json: { error: "Credenziali errate" }, status: :unauthorized
   end
+end
 
   def destroy
     terminate_session

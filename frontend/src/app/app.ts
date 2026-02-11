@@ -36,4 +36,26 @@ user: any;
   goToHome() {
     this.router.navigate(['/home']);
   }
+
+  logout() {
+    console.log('AppComponent.logout() called');
+    this.authService.logout().subscribe({
+      next: () => {
+        console.log('Logout success');
+        try {
+          this.authService.currentUser.set(null);
+        } catch (e) {}
+        localStorage.removeItem('user');
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Logout request failed', err);
+        try {
+          this.authService.currentUser.set(null);
+        } catch (e) {}
+        localStorage.removeItem('user');
+        this.router.navigate(['/login']);
+      }
+    });
+  }
 }

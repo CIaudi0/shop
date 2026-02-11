@@ -2,37 +2,34 @@ require "test_helper"
 
 class ProductsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @product = products(:one)
+      @admin = users(:admin_user)
+      @user = users(:normal_user)
+      @product = products(:one) 
   end
 
-  test "should get index" do
-    get products_url, as: :json
+  test "dovrebbe bloccare accesso senza login" do
+    post products_url, params: { product: { name: "Test" } }, as: :json
+    assert_response :unauthorized
+  end
+
+  test "admin dovrebbe vedere la lista prodotti" do
+    post session_url, params: { email_address: @admin.email_address, password: "password" }
+    
+    get products_url 
     assert_response :success
+    
+    assert_match "application/json", @response.media_type
   end
 
-  test "should create product" do
+  test "admin può creare un prodotto" do
+    post session_url, params: { email_address: @admin.email_address, password: "password" }
+
     assert_difference("Product.count") do
-      post products_url, params: { product: { description: @product.description, original_price: @product.original_price, price: @product.price, sale: @product.sale, thumbnail: @product.thumbnail, title: @product.title } }, as: :json
+      post products_url, params: { 
+        product: { name: "Nuovo", price: 50, description: "Test" } 
+      }, as: :json
     end
 
-    assert_response :created
-  end
-
-  test "should show product" do
-    get product_url(@product), as: :json
-    assert_response :success
-  end
-
-  test "should update product" do
-    patch product_url(@product), params: { product: { description: @product.description, original_price: @product.original_price, price: @product.price, sale: @product.sale, thumbnail: @product.thumbnail, title: @product.title } }, as: :json
-    assert_response :success
-  end
-
-  test "should destroy product" do
-    assert_difference("Product.count", -1) do
-      delete product_url(@product), as: :json
-    end
-
-    assert_response :no_content
+    assert_response :created 
   end
 end

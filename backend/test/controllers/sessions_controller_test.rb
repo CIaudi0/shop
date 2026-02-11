@@ -1,33 +1,32 @@
 require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
-  setup { @user = User.take }
-
-  test "new" do
-    get new_session_path
-    assert_response :success
+  setup do
+    @user = users(:normal_user) 
   end
+
 
   test "create with valid credentials" do
     post session_path, params: { email_address: @user.email_address, password: "password" }
 
-    assert_redirected_to root_path
-    assert cookies[:session_id]
+    assert_response :ok 
+    
+    assert_not_nil cookies[:session_token]
   end
 
   test "create with invalid credentials" do
     post session_path, params: { email_address: @user.email_address, password: "wrong" }
 
-    assert_redirected_to new_session_path
-    assert_nil cookies[:session_id]
+    assert_response :unauthorized
+    assert_nil cookies[:session_token]
   end
 
   test "destroy" do
-    sign_in_as(User.take)
-
+    post session_path, params: { email_address: @user.email_address, password: "password" }
+    
     delete session_path
 
-    assert_redirected_to new_session_path
-    assert_empty cookies[:session_id]
+    assert_response :success
+    assert_empty cookies[:session_token]
   end
 end

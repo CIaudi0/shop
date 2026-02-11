@@ -1,9 +1,9 @@
-<% password_digest = BCrypt::Password.create("password") %>
+admin_user:
+  email_address: admin@shop.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+  role: admin 
 
-one:
-  email_address: one@example.com
-  password_digest: <%= password_digest %>
-
-two:
-  email_address: two@example.com
-  password_digest: <%= password_digest %>
+normal_user:
+  email_address: user@shop.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+  role: user

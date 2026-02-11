@@ -1,17 +1,33 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  description: MyText
+  title: Prodotto 1
+  description: Descrizione1
   price: 9.99
   original_price: 9.99
   sale: false
-  thumbnail: MyString
+  thumbnail: http://img.com/1.jpg
 
 two:
-  title: MyString
-  description: MyText
+  title: Prodotto 2
+  description: Descrizione2
   price: 9.99
   original_price: 9.99
   sale: false
-  thumbnail: MyString
+  thumbnail: http://img.com/2.jpg
+
+three:
+  title: Prodotto 3
+  price: 9.99
+  description: Descrizione3
+  original_price: 12.00
+  sale: false
+  thumbnail: http://img.com/3.jpg
+
+four:
+  title: Prodotto 4
+  price: 19.99
+  description: Descrizione4
+  original_price: 22.00
+  sale: true
+  thumbnail: http://img.com/4.jpg

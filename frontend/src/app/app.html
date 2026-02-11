@@ -6,9 +6,25 @@
 
   <span class="spacer"></span>
 
-  <button mat-button *ngIf="!authService.isLoggedIn" routerLink="/login">Login</button>
-  <button mat-button *ngIf="authService.isLoggedIn" (click)="authService.logout()">Logout</button>
+  <mat-toolbar color="primary" class="navbar">
+  @if (authService.currentUser()?.role === 'admin') {
+    <button mat-button routerLink="/admin">
+      <mat-icon>admin_panel_settings</mat-icon>
+      Admin
+    </button>
+  }
+  </mat-toolbar>
 
+  @if (!authService.currentUser()) {
+    <button mat-button routerLink="/login">
+      Login
+    </button>
+  }
+  @if (authService.currentUser()) {
+    <button mat-button (click)="authService.logout()">
+      Logout
+    </button>
+  }
   <button mat-icon-button (click)="goToCheckout()">
   <mat-icon [matBadge]="cartService.count()" matBadgeColor="warn">shopping_cart</mat-icon>  </button>
 </mat-toolbar>

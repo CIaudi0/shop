@@ -26,3 +26,9 @@ export interface Order {
   total: number;
   createdAt: string;
 }
+
+export interface User {
+  id: number;
+  email_address: string;
+  role: string;
+}

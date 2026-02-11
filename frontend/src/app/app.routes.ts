@@ -5,7 +5,7 @@ import { checkoutGuard } from './guards/checkout';
 import { HomeComponent } from './pages/home/home'; 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 
   { 
     path: 'login', 
@@ -23,5 +23,5 @@ export const routes: Routes = [
     canActivate: [checkoutGuard] 
   },
   
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'home' }
 ];

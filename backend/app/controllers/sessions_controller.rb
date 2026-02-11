@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
       
       render json: { 
         message: "Login successful", 
-        user: { email: user.email_address, id: user.id } 
+        user: { email: user.email_address, id: user.id, role: user.role } 
       }, status: :created
     else
       render json: { error: "Credenziali non valide" }, status: :unauthorized

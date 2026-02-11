@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users, only: [:index]
     resources :orders, only: [:index]
+    resources :products, only: [:index, :create, :update, :destroy]
   end
   # Defines the root path route ("/")
   # root "posts#index"

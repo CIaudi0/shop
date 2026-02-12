@@ -1,59 +1,219 @@
-# Frontend
+# Shop – E-commerce Full Stack (Rails 8 + Angular 17 + Docker)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
+Piattaforma e-commerce sviluppata con architettura separata frontend/backend, containerizzata tramite Docker e configurata con Continuous Integration.
 
-## Development server
+Il progetto include:
 
-To start a local development server, run:
+* Backend API REST in Ruby on Rails 8
+* Frontend Single Page Application in Angular 17
+* Database PostgreSQL 16
+* Orchestrazione tramite Docker Compose
+* Testing automatizzato
+* Pipeline CI con GitHub Actions
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Architettura
 
-## Code scaffolding
+Il sistema è composto da tre servizi:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+* **db** → PostgreSQL 16
+* **backend** → Rails 8 API-only (porta 3000)
+* **frontend** → Angular 17 (porta 4200)
 
-```bash
-ng generate component component-name
-```
+La comunicazione tra frontend e backend avviene tramite API REST.
+L’autenticazione è basata su sessioni e cookie HttpOnly.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## Requisiti
 
-## Building
+Per eseguire il progetto è necessario avere installato:
 
-To build the project run:
+* Docker
+* Docker Compose (incluso nelle versioni recenti di Docker Desktop)
 
-```bash
-ng build
-```
+Non è necessario installare Ruby, Node o PostgreSQL localmente.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Avvio rapido
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Clonare la repository:
 
 ```bash
-ng e2e
+git clone https://github.com/CIaudi0/shop.git
+cd shop
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Avviare l’intero ambiente:
 
-## Additional Resources
+```bash
+docker compose up --build -d
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Il sistema sarà disponibile su:
+
+* Frontend: [http://localhost:4200](http://localhost:4200)
+* Backend API: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Configurazione iniziale del database
+
+Dopo il primo avvio è necessario eseguire le migrazioni:
+
+```bash
+docker compose exec backend bin/rails db:migrate
+```
+
+Per caricare dati di esempio (utenti e prodotti preimpostati):
+
+```bash
+docker compose exec backend bin/rails db:seed
+```
+
+Questo comando popola il database con:
+
+* Utente amministratore
+* Utente cliente
+* Prodotti dimostrativi
+
+---
+
+## Comandi utili
+
+### Accedere alla shell del backend
+
+```bash
+docker compose exec backend /bin/bash
+```
+
+### Accedere alla shell del frontend
+
+```bash
+docker compose exec frontend /bin/sh
+```
+
+### Visualizzare i log in tempo reale
+
+```bash
+docker compose logs -f
+```
+
+### Arrestare e pulire l’ambiente
+
+```bash
+docker compose down --remove-orphans
+```
+
+---
+
+## Testing
+
+### Backend (Rails + Minitest)
+
+Per eseguire i test in modo isolato:
+
+1. Arrestare eventuali container:
+
+```bash
+docker compose down --remove-orphans
+```
+
+2. Avviare solo il database:
+
+```bash
+docker compose up -d db
+```
+
+3. Preparare il database di test:
+
+```bash
+docker compose run --rm -e RAILS_ENV=test backend bin/rails db:test:prepare
+```
+
+4. Eseguire i test:
+
+```bash
+docker compose run --rm -e RAILS_ENV=test backend bin/rails test
+```
+
+Il backend utilizza:
+
+* Minitest
+* SimpleCov per analisi copertura
+
+---
+
+### Frontend (Angular + Karma + Jasmine)
+
+I test frontend vengono eseguiti in modalità headless (ChromeHeadlessCI), compatibile con ambiente Docker.
+
+Per eseguire i test dal container frontend:
+
+```bash
+docker compose exec frontend npm run test
+```
+
+---
+
+## Autenticazione
+
+Il sistema utilizza:
+
+* Autenticazione stateful
+* Sessioni server-side
+* Cookie HttpOnly
+* Controllo ruoli (admin / customer)
+
+Le richieste dal frontend includono automaticamente le credenziali grazie a un HTTP Interceptor configurato con `withCredentials: true`.
+
+---
+
+## Area Amministrativa
+
+Le funzionalità amministrative sono disponibili solo per utenti con ruolo `admin`.
+
+Permettono di:
+
+* Creare prodotti
+* Modificare prodotti
+* Eliminare prodotti
+
+Le autorizzazioni vengono verificate lato backend.
+
+---
+
+## Continuous Integration
+
+Il progetto include una pipeline GitHub Actions:
+
+`.github/workflows/ci.yml`
+
+Ad ogni push:
+
+* Viene ricostruito l’ambiente
+* Viene avviato PostgreSQL
+* Vengono eseguite migrazioni
+* Vengono lanciati tutti i test
+
+Questo garantisce stabilità del ramo principale.
+
+---
+
+## Struttura del progetto
+
+```
+shop/
+ ├── backend/
+ │    ├── app/
+ │    ├── config/
+ │    └── ...
+ ├── frontend/
+ │    ├── src/
+ │    └── ...
+ ├── docker-compose.yml
+ └── .github/workflows/
+```
+

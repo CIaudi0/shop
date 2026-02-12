@@ -1,5 +1,5 @@
 module Admin
-  class UsersController < ::AppController
+  class UsersController < ::ApplicationController
     before_action :ensure_admin
 
     def index

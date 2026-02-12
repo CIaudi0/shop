@@ -24,6 +24,7 @@ services:
       - "3000:3000"
     volumes:
       - ./backend:/rails
+      - gem_cache:/usr/local/bundle   # cache gemme
     depends_on:
       db:
         condition: service_healthy
@@ -43,3 +44,4 @@ services:
 
 volumes:
   postgres_data:
+  gem_cache:

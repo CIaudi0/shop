@@ -1,7 +1,7 @@
 admin_user:
   email_address: admin@shop.com
   password_digest: <%= BCrypt::Password.create('password') %>
-  role: admin 
+  role: admin
 
 normal_user:
   email_address: user@shop.com

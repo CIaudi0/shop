@@ -1,9 +1,9 @@
-one:
-  user: one
-  ip_address: "127.0.0.1"
-  user_agent: "Mozilla/5.0 (Test Browser)"
+admin_session:
+  user: admin_user
+  ip_address: 127.0.0.1
+  user_agent: "Mozilla/5.0 (Test)"
 
-two:
-  user: two
-  ip_address: "127.0.0.1"
-  user_agent: "Mozilla/5.0 (Test Browser)"
+user_session:
+  user: normal_user
+  ip_address: 127.0.0.1
+  user_agent: "Mozilla/5.0 (Test)"

@@ -9,8 +9,8 @@ on:
 jobs:
   backend-test:
     runs-on: ubuntu-latest
+    
     services:
-      # Container PostgreSQL temporaneo per i test
       postgres:
         image: postgres:16-alpine
         env:
@@ -32,27 +32,23 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 8.1.0
+          ruby-version: 3.4.1 
           bundler-cache: true
           working-directory: ./backend
 
-      - name: Installazione Dipendenze
-        working-directory: ./backend
-        run: bundle install
 
       - name: Setup Database
         working-directory: ./backend
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://rails_user:password@localhost:5432/shop_test
-        run: |
-          bin/rails db:prepare
+          DATABASE_URL: postgres://admin:admin@localhost:5432/shop_test
+        run: bin/rails db:prepare
 
       - name: Esecuzione Test (Minitest)
         working-directory: ./backend
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://rails_user:password@localhost:5432/shop_test
+          DATABASE_URL: postgres://admin:admin@localhost:5432/shop_test
         run: bin/rails test
 
   frontend-test:

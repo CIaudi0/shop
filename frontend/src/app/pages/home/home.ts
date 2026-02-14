@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './home.html',
+  styleUrl: './home.scss'
 })
 export class HomeComponent {
   private productService = inject(ProductService);

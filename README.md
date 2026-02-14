@@ -156,6 +156,10 @@ Per eseguire i test dal container frontend:
 docker compose exec frontend npm run test
 ```
 
+```bash
+docker compose exec -u root frontend npm install ...
+```
+
 ---
 
 ## Autenticazione

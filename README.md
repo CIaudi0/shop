@@ -107,6 +107,12 @@ docker compose logs -f
 docker compose down --remove-orphans
 ```
 
+### Importare i moduli in VsCode
+
+```bash
+docker cp $(docker compose ps -q frontend):/app/node_modules ./frontend/
+```
+
 ---
 
 ## Testing
@@ -153,7 +159,7 @@ I test frontend vengono eseguiti in modalità headless (ChromeHeadlessCI), compa
 Per eseguire i test dal container frontend:
 
 ```bash
-docker compose exec frontend npm run test
+docker compose exec frontend npx ng test --watch=false --browsers=ChromeHeadlessCI --code-coverage
 ```
 
 ```bash
@@ -210,14 +216,34 @@ Questo garantisce stabilità del ramo principale.
 
 ```
 shop/
- ├── backend/
- │    ├── app/
- │    ├── config/
- │    └── ...
- ├── frontend/
- │    ├── src/
- │    └── ...
- ├── docker-compose.yml
- └── .github/workflows/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                 ← Pipeline GitHub Actions
+├── backend/
+│   ├── app/
+│   │   ├── controllers/           ← Controller Rails (API)
+│   │   ├── models/                ← Modelli ActiveRecord
+│   │   └── ...
+│   ├── config/
+│   │   ├── routes.rb              ← Rotte API
+│   │   └── database.yml           ← Configurazione DB
+│   ├── db/
+│   │   ├── migrate/               ← Migrazioni database
+│   │   └── seeds.rb               ← Dati di esempio
+│   ├── test/                      ← Test Minitest
+│   ├── Gemfile                    ← Dipendenze Ruby
+│   └── Dockerfile                 ← Immagine Docker backend
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── components/        ← Componenti Angular
+│   │   │   ├── services/          ← Servizi HTTP
+│   │   │   └── interceptors/      ← HTTP Interceptor (credenziali)
+│   │   └── ...
+│   ├── package.json               ← Dipendenze Node/Angular
+│   ├── karma.conf.js              ← Configurazione test frontend
+│   └── Dockerfile                 ← Immagine Docker frontend
+├── docker-compose.yml             ← Orchestrazione 3 servizi
+└── README.md
 ```
 

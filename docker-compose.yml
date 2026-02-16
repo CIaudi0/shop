@@ -33,6 +33,8 @@ services:
 
   frontend:
     build: ./frontend
+    security_opt:
+      - seccomp:unconfined
     ports:
       - "4200:4200"
     volumes:

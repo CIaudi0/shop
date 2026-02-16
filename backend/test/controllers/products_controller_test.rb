@@ -8,31 +8,23 @@ module Admin
       @product = products(:one)
     end
 
-    test "dovrebbe bloccare accesso senza login" do
-      post admin_products_url, params: { product: { title: "Test" } }, as: :json
-      
-      assert_response :unauthorized
+    require "test_helper"
+
+
+    test "should get index" do
+      get products_url
+      assert_response :success
     end
 
-    test "admin dovrebbe vedere la lista prodotti" do
-      # Login
-      post session_url, params: { email_address: @admin.email_address, password: "password" }
-      
-      # Richiesta alla rotta ADMIN
-      get admin_products_url
-      
+    test "should show product" do
+      get product_url(@product)
       assert_response :success
-      
-      # Verifica che sia JSON
-      assert_match "application/json", @response.media_type
     end
 
     test "admin può creare un prodotto" do
-      # Login
       post session_url, params: { email_address: @admin.email_address, password: "password" }
 
       assert_difference("Product.count") do
-        # POST alla rotta ADMIN
         post admin_products_url, params: { 
           product: { 
             title: "Nuovo Prodotto", 

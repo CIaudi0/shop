@@ -57,7 +57,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 export class ProductDialogComponent {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<ProductDialogComponent>);
-  public data = inject(MAT_DIALOG_DATA); // I dati passati (se modifica)
+  public data = inject(MAT_DIALOG_DATA);
 
   form: FormGroup = this.fb.group({
     title: [this.data?.title || '', Validators.required],

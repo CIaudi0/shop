@@ -12,10 +12,10 @@ module.exports = function (config) {
     client: {
       jasmine: {
       },
-      clearContext: false 
+      clearContext: false
     },
     jasmineHtmlReporter: {
-      suppressAll: true 
+      suppressAll: true
     },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/shop'),
@@ -30,7 +30,13 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-gpu']
+        flags: [
+          '--no-sandbox',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--disable-software-rasterizer',
+          '--remote-debugging-port=9222'
+        ]
       }
     },
     restartOnFileChange: true

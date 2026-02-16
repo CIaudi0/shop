@@ -6,6 +6,8 @@ COPY package.json package-lock.json ./
 
 RUN npm install
 RUN npm install -g @angular/cli
+RUN apk add --no-cache chromium
+ENV CHROME_BIN=/usr/bin/chromium
 
 COPY . .
 

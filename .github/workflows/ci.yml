@@ -44,7 +44,7 @@ jobs:
           DATABASE_URL: postgres://admin:admin@localhost:5432/shop_test
         run: bin/rails db:prepare
 
-      - name: Esecuzione Test (Minitest)
+      - name: Minitest
         working-directory: ./backend
         env:
           RAILS_ENV: test
@@ -68,6 +68,6 @@ jobs:
         working-directory: ./frontend
         run: npm ci
 
-      - name: Esecuzione Test (Headless)
+      - name: Esecuzione Test
         working-directory: ./frontend
         run: npx ng test --no-watch --browsers=ChromeHeadless

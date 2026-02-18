@@ -54,8 +54,8 @@ docker compose up --build -d
 
 Il sistema sarà disponibile su:
 
-* Frontend: [http://localhost:4200](http://localhost:4200)
-* Backend API: [http://localhost:3000](http://localhost:3000)
+* Frontend: http://localhost:4200
+* Backend API: http://localhost:3000
 
 ---
 
@@ -161,6 +161,8 @@ Per eseguire i test dal container frontend:
 ```bash
 docker compose exec frontend npx ng test --watch=false --browsers=ChromeHeadlessCI --code-coverage
 ```
+
+Installare pacchett aggiuntivi
 
 ```bash
 docker compose exec -u root frontend npm install ...
